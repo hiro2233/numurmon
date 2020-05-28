@@ -76,7 +76,7 @@ int main(int argc, char **argv)
 
 	if( !bindport )
 	{
-		bindport = 64738;
+		bindport = 1234;
 	}
 
 	sprintf( shm_file_name, "/umurmurd:%i", bindport );
@@ -173,8 +173,24 @@ void run_shm(void)
 
 			if( !shmptr->client[cc].authenticated )
 				continue;
-		
-		
+
+		if( shmptr->client[cc].isAdmin )
+       	 {
+        		attrset( COLOR_PAIR(1) );
+        		mvprintw( cc + 5, 1, "%s", shmptr->client[cc].username );
+        		standend();
+						printw( "@%s:%i", shmptr->client[cc].ipaddress,
+						    				 	shmptr->client[cc].udp_port );        		
+        		printw( "/%s", shmptr->client[cc].channel );
+       	}
+		  	else
+		  		{
+		    			//mvprintw( cc + 5, 1, "%s", shmptr->client[cc].username );
+							printw( "@%s:%i", shmptr->client[cc].ipaddress,
+						    				 	shmptr->client[cc].udp_port );
+							printw( "/%s", shmptr->client[cc].channel );
+					}
+
 				if( shmptr->client[cc].availableBandwidth < 10000 )							//FIXME: Re work this miss case were user talking on join doesnt print ipaddress
 				{
 					attrset( COLOR_PAIR(2) );
